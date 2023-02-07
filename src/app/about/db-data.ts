@@ -1098,7 +1098,7 @@ export function findCourseById(courseId: number) {
   return COURSES[courseId];
 }
 
-export function findLessonsForCourse(courseId: number) {
+export function findLessonsForCourse(courseId: any) {
   return Object.values(LESSONS).filter(lesson => lesson.courseId == courseId);
 }
 
