@@ -4,6 +4,7 @@ import {from, Observable} from 'rxjs';
 import {concatMap, filter, map} from 'rxjs/operators';
 import {Firestore} from '@angular/fire/firestore';
 import {Router} from '@angular/router';
+import { UserService } from './services/user.service';
 
 @Component({
   selector: 'app-root',
@@ -12,12 +13,16 @@ import {Router} from '@angular/router';
 })
 export class AppComponent implements OnInit {
 
-  constructor() {
+  constructor(public user: UserService) {
 
   }
 
   ngOnInit() {
 
+  }
+
+  public onLoggedOut(){
+    this.user.logout();
   }
 
 }

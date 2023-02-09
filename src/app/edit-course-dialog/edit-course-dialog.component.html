@@ -1,39 +1,41 @@
 
 <h2 mat-dialog-title>Edit Course</h2>
+<form [formGroup]="editCourseForm">
+    <mat-dialog-content>
 
-<mat-dialog-content>
+        <mat-form-field>
+    
+            <input matInput formControlName="description"
+                    placeholder=" Title">
+    
+        </mat-form-field>
+    
+      <mat-slide-toggle class="promo" color="primary" formControlName="promo">
+        Course in promotion?
+      </mat-slide-toggle>
+    
+        <mat-form-field>
+    
+            <textarea matInput placeholder="Description" formControlName="longDescription">
+    
+            </textarea>
+    
+        </mat-form-field>
+    
+    </mat-dialog-content>
+    
+    <mat-dialog-actions>
+    
+        <button mat-raised-button (click)="close()">
+            Close
+        </button>
+    
+        <button mat-raised-button color="primary" (click)="save()" [disabled]="!editCourseForm.valid">
+            Save
+        </button>
+    
+    </mat-dialog-actions>
+</form>
 
-    <mat-form-field>
-
-        <input matInput
-                placeholder=" Title">
-
-    </mat-form-field>
-
-  <mat-slide-toggle class="promo" color="primary">
-    Course in promotion?
-  </mat-slide-toggle>
-
-    <mat-form-field>
-
-        <textarea matInput placeholder="Description">
-
-        </textarea>
-
-    </mat-form-field>
-
-</mat-dialog-content>
-
-<mat-dialog-actions>
-
-    <button mat-raised-button>
-        Close
-    </button>
-
-    <button mat-raised-button color="primary">
-        Save
-    </button>
-
-</mat-dialog-actions>
 
 

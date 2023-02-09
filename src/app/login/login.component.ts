@@ -1,7 +1,8 @@
 import {Component, NgZone, OnDestroy, OnInit} from '@angular/core';
-import * as firebaseui from '@angular/fire';
+import * as firebaseui from 'firebaseui';
 import {AngularFireAuth} from '@angular/fire/compat/auth';
 import {Router} from '@angular/router';
+import { EmailAuthProvider, GoogleAuthProvider } from 'firebase/auth';
 // import firebase from 'firebase/app';
 // import EmailAuthProvider = firebase.auth.EmailAuthProvider;
 // import GoogleAuthProvider = firebase.auth.GoogleAuthProvider;
@@ -14,17 +15,36 @@ import {Router} from '@angular/router';
 })
 export class LoginComponent implements OnInit, OnDestroy {
 
+    ui!: firebaseui.auth.AuthUI;
 
-    constructor() {
+    constructor(private afAuth: AngularFireAuth,
+        private route: Router) {
 
     }
 
     ngOnInit() {
+        this.afAuth.app.then(app => {
+            const uiConfig = {
+                signInOptions: [EmailAuthProvider.PROVIDER_ID,GoogleAuthProvider.PROVIDER_ID],
+                callbacks: {
+                    signInSuccessWithAuthResult: this.onLoginSuccessful.bind(this)
+                }
+            };
+            this.ui = new firebaseui.auth.AuthUI(app.auth());
+            this.ui.start("#firebaseui-auth-container", uiConfig);
+            this.ui.disableAutoSignIn();
+        });
 
+        
     }
 
     ngOnDestroy() {
+        this.ui.delete();
+    }
 
+    private onLoginSuccessful(result: any): boolean{
+        this.route.navigateByUrl('/courses');
+        return true;
     }
 }
 

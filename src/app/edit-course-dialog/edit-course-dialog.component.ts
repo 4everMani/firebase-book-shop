@@ -1,9 +1,10 @@
-import {Component, Inject, OnInit} from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
-import {Course} from "../model/course";
-import {FormBuilder, Validators, FormGroup} from "@angular/forms";
-import {Storage} from '@angular/fire/storage';
-import {Observable} from 'rxjs';
+import { Course } from "../model/course";
+import { FormBuilder, Validators, FormGroup } from "@angular/forms";
+import { Storage } from '@angular/fire/storage';
+import { catchError, Observable } from 'rxjs';
+import { CoursesService } from '../services/courses.service';
 
 
 @Component({
@@ -13,9 +14,41 @@ import {Observable} from 'rxjs';
 })
 export class EditCourseDialogComponent {
 
-    constructor() {
+    public editCourseForm!: FormGroup;
 
+    private course!: Course;
+    constructor(private dialogRef: MatDialogRef<EditCourseDialogComponent>,
+        private fb: FormBuilder,
+        @Inject(MAT_DIALOG_DATA) course: Course,
+        private coursesService: CoursesService) {
+            this.course = course;
+        this.editCourseForm = this.fb.group({
+            description: [course.description, Validators.required],
+            longDescription: [course.longDescription, Validators.required],
+            promo: [course.promo],
+
+        })
     }
+
+    public close(): void {
+        this.dialogRef.close();
+    }
+
+    public save(): void{
+        const changes = this.editCourseForm.value
+        this.coursesService.updateCourse(this.course.id,changes)
+        .pipe(
+            catchError(err => {
+                alert(err);
+                throw err;
+            })
+        )
+        .subscribe(res => {
+            this.dialogRef.close(changes);
+        })
+        
+    }
+
 }
 
 
